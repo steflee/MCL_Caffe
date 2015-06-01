@@ -12,7 +12,7 @@ layer {
   }
   data_param {
     source: "examples/cifar10/cifar10_train_lmdb"
-    batch_size: 100
+    batch_size: 300
     backend: LMDB
   }
 }
@@ -563,27 +563,18 @@ layer {
   type: "Softmax"
   bottom: "1_ip2"
   top: "1_prob"
-  include {
-    phase: TEST
-  }
 }
 layer {
   name: "loss"
   type: "Softmax"
   bottom: "2_ip2"
   top: "2_prob"
-  include {
-    phase: TEST
-  }
 }
 layer {
   name: "loss"
   type: "Softmax"
   bottom: "3_ip2"
   top: "3_prob"
-  include {
-    phase: TEST
-  }
 }
 
 
@@ -632,32 +623,14 @@ layer {
 }
 
 layer {
-  name: "1_loss"
-  type: "SoftmaxWithLoss"
-  bottom: "1_ip2"
+  name: "loss"
+  type: "MCLMultinomialLogisticLoss"
+  bottom: "1_prob"
+	bottom: "2_prob"
+	bottom: "3_prob"
   bottom: "label"
-  top: "1_loss"
-  include {
-    phase: TRAIN
-  }
-}
-layer {
-  name: "2_loss"
-  type: "SoftmaxWithLoss"
-  bottom: "2_ip2"
-  bottom: "label"
-  top: "2_loss"
-  include {
-    phase: TRAIN
-  }
-}
-layer {
-  name: "3_loss"
-  type: "SoftmaxWithLoss"
-  bottom: "3_ip2"
-  bottom: "label"
-  top: "3_loss"
-  include {
+  top: "multiple-output loss"
+	include {
     phase: TRAIN
   }
 }

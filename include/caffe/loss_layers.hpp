@@ -686,7 +686,7 @@ class MCLMultinomialLogisticLossLayer : public LossLayer<Dtype> {
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
-	Blob<Dtype> pred_scales_;
+	Blob<Dtype> assign_counts_;
 	Blob<Dtype> best_pred_;
 
 };

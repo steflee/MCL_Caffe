@@ -346,6 +346,7 @@ message LayerParameter {
   optional TanHParameter tanh_param = 127;
   optional ThresholdParameter threshold_param = 128;
   optional WindowDataParameter window_data_param = 129;
+	optional MCLParameter mcl_param = 45;
 }
 
 // Message that stores parameters used to apply transformation
@@ -375,6 +376,7 @@ message LossParameter {
   // dimesions, but not ignored instances); else, divide by batch size only.
   optional bool normalize = 2 [default = true];
 }
+
 
 // Messages that store parameters used by individual layer types follow, in
 // alphabetical order.
@@ -611,6 +613,11 @@ message LRNParameter {
   }
   optional NormRegion norm_region = 4 [default = ACROSS_CHANNELS];
   optional float k = 5 [default = 1.];
+}
+
+message MCLParameter {
+  optional bool exp_weights = 1 [default = false];
+  optional uint32 hard_k = 2 [default = 1];
 }
 
 message MemoryDataParameter {
@@ -940,6 +947,7 @@ message V1LayerParameter {
   optional WindowDataParameter window_data_param = 20;
   optional TransformationParameter transform_param = 36;
   optional LossParameter loss_param = 42;
+	optional MCLParameter mcl_param = 45;
   optional V0LayerParameter layer = 1;
 }
 
