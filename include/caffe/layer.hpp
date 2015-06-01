@@ -383,9 +383,9 @@ class Layer {
   inline void SetLossWeights(const vector<Blob<Dtype>*>& top) {
     const int num_loss_weights = layer_param_.loss_weight_size();
     if (num_loss_weights) {
-      CHECK_EQ(top.size(), num_loss_weights) << "loss_weight must be "
+      CHECK_GE(top.size(), num_loss_weights) << "loss_weight must be "
           "unspecified or specified once per top blob.";
-      for (int top_id = 0; top_id < top.size(); ++top_id) {
+      for (int top_id = 0; top_id < num_loss_weights; ++top_id) {
         const Dtype loss_weight = layer_param_.loss_weight(top_id);
         if (loss_weight == Dtype(0)) { continue; }
         this->set_loss(top_id, loss_weight);
