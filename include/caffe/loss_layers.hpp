@@ -628,7 +628,8 @@ class MCLMultinomialLogisticLossLayer : public LossLayer<Dtype> {
   virtual inline const char* type() const { return "MCLMultinomialLogisticLoss"; }
   virtual inline int ExactNumBottomBlobs() const { return -1; }
   virtual inline int MinBottomBlobs() const { return 2; }
-
+  virtual inline int ExactNumTopBlobs() const { return -1; }
+  virtual inline int MinTopBlobs() const { return 1; }
   virtual inline bool AllowForceBackward(const int bottom_index) const {
     return true;
   }
