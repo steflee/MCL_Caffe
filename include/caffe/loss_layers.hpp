@@ -91,23 +91,14 @@ class AccuracyLayer : public Layer<Dtype> {
 
 /**
  * @brief Computes the classification accuracy for a one-of-many
- *        classification task.
+ *        classification task, using only the most correct predictor
+ *        from an ensemble to compute accuracy.
  */
 template <typename Dtype>
 class OracleAccuracyLayer : public Layer<Dtype> {
  public:
-  /**
-   * @param param provides AccuracyParameter accuracy_param,
-   *     with AccuracyLayer options:
-   *   - top_k (\b optional, default 1).
-   *     Sets the maximum rank @f$ k @f$ at which a prediction is considered
-   *     correct.  For example, if @f$ k = 5 @f$, a prediction is counted
-   *     correct if the correct label is among the top 5 predicted labels.
-   */
   explicit OracleAccuracyLayer(const LayerParameter& param)
       : Layer<Dtype>(param) {}
-  virtual void LayerSetUp(const vector<Blob<Dtype>*>& bottom,
-      const vector<Blob<Dtype>*>& top);
   virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
 
@@ -117,7 +108,7 @@ class OracleAccuracyLayer : public Layer<Dtype> {
 
  protected:
   /**
-   * @param bottom input Blob vector (length 2)
+   * @param bottom input Blob vector (length >=2)
    *   -# @f$ (N \times C \times H \times W) @f$
    *      the predictions @f$ x @f$, a Blob with values in
    *      @f$ [-\infty, +\infty] @f$ indicating the predicted score for each of
@@ -152,14 +143,6 @@ class OracleAccuracyLayer : public Layer<Dtype> {
     }
   }
 
-  int label_axis_, outer_num_, inner_num_;
-
-  int top_k_;
-
-  /// Whether to ignore instances with a certain label.
-  bool has_ignore_label_;
-  /// The label indicating that an instance should be ignored.
-  int ignore_label_;
 };
 
 
@@ -651,44 +634,15 @@ class MCLMultinomialLogisticLossLayer : public LossLayer<Dtype> {
   }
 
  protected:
-  /// @copydoc MultinomialLogisticLossLayer
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
       const vector<Blob<Dtype>*>& top);
 
-  /**
-   * @brief Computes the multinomial logistic loss error gradient w.r.t. the
-   *        predictions.
-   *
-   * Gradients cannot be computed with respect to the label inputs (bottom[1]),
-   * so this method ignores bottom[1] and requires !propagate_down[1], crashing
-   * if propagate_down[1] is set.
-   *
-   * @param top output Blob vector (length 1), providing the error gradient with
-   *      respect to the outputs
-   *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
-   *      This Blob's diff will simply contain the loss_weight* @f$ \lambda @f$,
-   *      as @f$ \lambda @f$ is the coefficient of this layer's output
-   *      @f$\ell_i@f$ in the overall Net loss
-   *      @f$ E = \lambda_i \ell_i + \mbox{other loss terms}@f$; hence
-   *      @f$ \frac{\partial E}{\partial \ell_i} = \lambda_i @f$.
-   *      (*Assuming that this top Blob is not used as a bottom (input) by any
-   *      other layer of the Net.)
-   * @param propagate_down see Layer::Backward.
-   *      propagate_down[1] must be false as we can't compute gradients with
-   *      respect to the labels.
-   * @param bottom input Blob vector (length 2)
-   *   -# @f$ (N \times C \times H \times W) @f$
-   *      the predictions @f$ \hat{p} @f$; Backward computes diff
-   *      @f$ \frac{\partial E}{\partial \hat{p}} @f$
-   *   -# @f$ (N \times 1 \times 1 \times 1) @f$
-   *      the labels -- ignored as we can't compute their error gradients
-   */
+  
   virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
       const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
 
 	Blob<Dtype> assign_counts_;
 	Blob<Dtype> best_pred_;
-
 };
 
 /**

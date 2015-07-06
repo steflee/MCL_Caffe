@@ -346,7 +346,7 @@ message LayerParameter {
   optional TanHParameter tanh_param = 127;
   optional ThresholdParameter threshold_param = 128;
   optional WindowDataParameter window_data_param = 129;
-	optional MCLParameter mcl_param = 45;
+  optional MCLParameter mcl_param = 45;
 }
 
 // Message that stores parameters used to apply transformation
@@ -616,7 +616,6 @@ message LRNParameter {
 }
 
 message MCLParameter {
-  optional bool exp_weights = 1 [default = false];
   optional uint32 hard_k = 2 [default = 1];
 }
 
@@ -890,7 +889,7 @@ message V1LayerParameter {
     LRN = 15;
     MEMORY_DATA = 29;
     MULTINOMIAL_LOGISTIC_LOSS = 16;
-		MCL_MULTINOMIAL_LOGISTIC_LOSS = 43;
+	MCL_MULTINOMIAL_LOGISTIC_LOSS = 43;
     MVN = 34;
     POOLING = 17;
     POWER = 26;
@@ -947,7 +946,7 @@ message V1LayerParameter {
   optional WindowDataParameter window_data_param = 20;
   optional TransformationParameter transform_param = 36;
   optional LossParameter loss_param = 42;
-	optional MCLParameter mcl_param = 45;
+  optional MCLParameter mcl_param = 45;
   optional V0LayerParameter layer = 1;
 }
 
