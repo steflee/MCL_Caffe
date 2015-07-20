@@ -347,6 +347,7 @@ message LayerParameter {
   optional ThresholdParameter threshold_param = 128;
   optional WindowDataParameter window_data_param = 129;
   optional MCLParameter mcl_param = 45;
+  optional SequentialMCLParameter seq_mcl_param = 46;
 }
 
 // Message that stores parameters used to apply transformation
@@ -619,6 +620,10 @@ message MCLParameter {
   optional uint32 hard_k = 2 [default = 1];
 }
 
+message SequentialMCLParameter {
+  optional double sigma = 1 [default = 1];
+}
+
 message MemoryDataParameter {
   optional uint32 batch_size = 1;
   optional uint32 channels = 2;
@@ -889,7 +894,7 @@ message V1LayerParameter {
     LRN = 15;
     MEMORY_DATA = 29;
     MULTINOMIAL_LOGISTIC_LOSS = 16;
-	MCL_MULTINOMIAL_LOGISTIC_LOSS = 43;
+	  MCL_MULTINOMIAL_LOGISTIC_LOSS = 43;
     MVN = 34;
     POOLING = 17;
     POWER = 26;

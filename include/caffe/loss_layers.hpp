@@ -618,6 +618,33 @@ class MultinomialLogisticLossLayer : public LossLayer<Dtype> {
 
 
 template <typename Dtype>
+class SequentialMCLMultinomialLogisticLossLayer : public LossLayer<Dtype> {
+ public:
+  explicit SequentialMCLMultinomialLogisticLossLayer(const LayerParameter& param)
+      : LossLayer<Dtype>(param) {}
+  virtual void Reshape(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+
+  virtual inline const char* type() const { return "SequentialMCLMultinomialLogisticLoss"; }
+  virtual inline int ExactNumBottomBlobs() const { return -1; }
+  virtual inline int MinBottomBlobs() const { return 2; }
+  virtual inline int MaxBottomBlobs() const { return 4; }
+  virtual inline int ExactNumTopBlobs() const { return 3; }
+  virtual inline bool AllowForceBackward(const int bottom_index) const {
+    return bottom_index >= 1;
+  }
+
+ protected:
+  virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,
+      const vector<Blob<Dtype>*>& top);
+
+  
+  virtual void Backward_cpu(const vector<Blob<Dtype>*>& top,
+      const vector<bool>& propagate_down, const vector<Blob<Dtype>*>& bottom);
+
+};
+
+template <typename Dtype>
 class MCLMultinomialLogisticLossLayer : public LossLayer<Dtype> {
  public:
   explicit MCLMultinomialLogisticLossLayer(const LayerParameter& param)
