@@ -871,6 +871,7 @@ message V1LayerParameter {
     ABSVAL = 35;
     ACCURACY = 1;
 		ORACLE_ACCURACY = 44;
+		ENSEMBLE_ACCURACY = 47;
     ARGMAX = 30;
     BNLL = 2;
     CONCAT = 3;
